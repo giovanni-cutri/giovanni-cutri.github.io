@@ -2441,3 +2441,7 @@ input, select, textarea {
 					}
 
 	}
+
+.middle {
+	margin:auto;
+}
