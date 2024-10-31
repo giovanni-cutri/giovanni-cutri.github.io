@@ -1,0 +1,422 @@
+---
+title: "Report per l’esame di Laboratorio di Analisi dei Dati (A-L)"
+author: "Giovanni Cutrì Matr. 0001020586"
+date: '2022-05-17'
+output: word_document
+---
+
+# Introduzione
+
+In questo report, verranno mostrati i risultati dell'analisi statistica
+condotta sul dataset "80 Cereals", disponibile su Kaggle al seguente link: https://www.kaggle.com/datasets/crawford/80-cereals (per scaricarlo è 
+necessario essere registrati al sito).
+
+Il dataset contiene diverse informazioni relative a circa ottanta prodotti
+a base di cereali. Di seguito una breve descrizione delle variabili osservate
+e il loro tipo:
+
+- **Name**: Nome del cereale *(qualitativa sconnessa)* 
+
+- **mfr**: Produttore del cereale *(qualitativa sconnessa)*
+  + *A = American Home Food Products*
+  + *G = General Mills*
+  + *K = Kellogs*
+  + *N = Nabisco*
+  + *P = Post*
+  + *Q = Quaker Oats*
+  + *R = Ralston Purina*
+
+- **type**: Tipologia *(qualitativa sconnessa)* 
+  + *C = Cold (freddo)*
+  + *H = hot (caldo)*
+  
+- **calories**: Calorie per porzione *(quantitativa discreta)* 
+
+- **protein**: Proteine in grammi *(quantitativa discreta)*
+
+- **fat**: Grassi in grammi *(quantitativa discreta)* 
+
+- **sodium**: Sodio in milligrammi *(quantitativa discreta)* 
+
+- **fiber**: Fibra alimentare in grammi *(quantitativa continua)* 
+
+- **carbo**: Carboidrati complessi in grammi *(quantitativa continua)* 
+
+- **sugars**: Zuccheri in grammi *(quantitativa discreta)* 
+
+- **potass**: Potassio in milligrammi *(quantitativa discreta)* 
+
+- **vitamins**: Vitamine e minerali - 0, 25 o 100 indica la percentuale raccomandata dalla FDA *(quantitativa discreta)* 
+
+- **shelf**: Scaffale di esposizione - 1, 2 o 3, contando dal basso *(qualitativa ordinabile)*
+
+- **weight**: Peso per porzione in once *(quantitativa continua)*
+
+- **cups**: Numero di tazze per porzione *(quantitativa continua)*
+
+- **rating**: Voto assegnato ai cereali *(quantitativa continua)*
+
+L'obiettivo è quello di descrivere alcune delle variabili e trovare eventuali
+connessioni fra di esse per scoprire delle informazioni aggiuntive sui prodotti
+di cereali presenti nel mercato.
+
+Tutti i codici che compaiono nel report sono compresi nel file "script.R" allegato.
+
+<br>
+
+# Analisi  
+
+<br>
+
+## Struttura del dataset
+
+Analizziamo la struttura del dataset e delle variabili che lo compongono: 
+
+```{r include=FALSE}
+load("workspace.RData")
+```
+
+```{r echo=FALSE, comment=NA}
+str(cereali)
+```
+
+Notiamo che la variabile "shelf", che indica la posizione dello scaffale,
+dovrebbe essere qualitiva ordinabile, ma è stata importata come numerica. Per risolvere 
+il problema, utilizziamo la funzione factor():
+
+```{r}
+cereali$shelf <- factor(cereali$shelf, labels = c("First", "Second", "Third"), 
+                        ordered = T)
+```
+
+Allo stesso modo, sempre utilizzando factor(), possiamo ricodificare le variabili 
+"mfr" e "type" per evidenziare che si tratta di variabili categoriche con delle modalità.
+
+```{r}
+cereali$mfr <- factor(cereali$mfr)
+cereali$type <- factor(cereali$type)
+
+```
+
+Ecco la nuova struttura delle tre variabili:
+
+```{r echo=TRUE}
+str(cereali$shelf)
+str(cereali$mfr)
+str(cereali$type)
+```
+
+<br>
+
+## Descrizione di singole variabili qualitative
+
+<br>
+
+### Variabile "mfr"
+
+Questa è la distribuzione di frequenze della variabile dei produttori, seguita
+da due rappresentazioni grafiche:
+
+```{r echo=FALSE, comment=NA}
+
+table(cereali$mfr)
+
+percentuali <- round(prop.table(table(cereali$mfr))*100, digits = 2)
+etichette <- paste(names(percentuali), percentuali)
+etichette <- paste(etichette, "%", sep = "")
+
+pie(table(cereali$mfr), main = "Grafico a torta per i produttori", col=1:7,
+    labels = etichette)
+
+barplot(table(cereali$mfr), main = "Grafico a barre per i produttori",
+        names.arg = names(table(cereali$mfr)), col = "burlywood")
+
+```
+
+Sia dal grafico a torta, sia dal grafico a barre, si può notare come la maggior 
+parte dei cereali esaminati sia prodotta da Kellogs e General Mills, che 
+combinate assieme arrivano quasi al 60%.
+
+<br>
+
+### Variabile "type"
+
+Per quanto riguarda la tipologia, i cereali freddi sono in netta prevalenza
+rispetto a quelli caldi, come è rappresentato di seguito.
+
+```{r echo=FALSE, comment=NA}
+table(cereali$type)
+
+percentuali <- round(prop.table(table(cereali$type))*100, digits = 2)
+etichette <- paste(names(percentuali), percentuali)
+etichette <- paste(etichette, "%", sep = "")
+
+pie(table(cereali$type), main = "Grafico a torta per la tipologia di cereali", 
+    col = c("blue", "red"), labels = etichette)
+```
+
+La popolarità dei cereali freddi è probabilmente dovuta al fatto che essi sono 
+già pronti e più semplici da preparare, mentre quelli caldi richiedono un 
+tempo di cottura.
+
+<br>
+
+## Descrizione di singole variabili quantitative
+
+<br>
+
+### Variabile "calories"
+
+```{r comment=NA}
+summary(cereali$calories)
+IQR(cereali$calories)
+var(cereali$calories)
+sd(cereali$calories)
+
+```
+
+Dalle misure di sintesi che abbiamo calcolato, si nota come gran parte
+delle osservazioni si concentri in un intervallo limitato: la mediana e il 
+terzo quartile coincidono e la differenza interquartile è molto bassa.
+
+Possiamo visualizzarlo graficamente con un boxplot.
+
+```{r echo=FALSE}
+boxplot(cereali$calories, main = "Distribuzione delle calorie")
+```
+
+Come ci aspettavamo, la scatola del boxplot è abbastanza stretta.
+Nel grafico sono indicati anche diversi outlier, che spiegano i valori piuttosto
+alti ottenuti per la varianza e la deviazione standard.
+
+Di seguito l'istogramma per la stessa distribuzione:
+
+```{r echo=FALSE}
+hist(cereali$calories, main = "Distribuzione delle calorie", probability = TRUE,
+     xlab = "Calorie", col = "darkblue")
+```
+
+<br>
+
+### Variabili dei nutrienti
+
+```{r comment=NA}
+summary(cereali$protein)
+summary(cereali$fat)
+summary(cereali$sodium)
+summary(cereali$fiber)
+summary(cereali$carbo)
+summary(cereali$sugars)
+summary(cereali$potass)
+```
+
+Notiamo che per i carboidrati, gli zuccheri e il potassio sono presenti
+dei valori anomali, impossibili nella realtà perché negativi. Decidiamo di 
+sostituirli con le mediane delle rispettive distribuzioni.
+
+```{r}
+cereali$carbo[cereali$carbo<0] <- median(cereali$carbo)
+cereali$sugars[cereali$sugars<0] <- median(cereali$sugars)
+cereali$potass[cereali$potass<0] <- median(cereali$potass)
+```
+
+Ed ecco i boxplot per ognuno dei nutrienti:
+
+```{r}
+boxplot(cereali$protein, main = "Distribuzione delle proteine")
+boxplot(cereali$fat, main = "Distribuzione dei grassi")
+boxplot(cereali$sodium, main = "Distribuzione del sodio")
+boxplot(cereali$fiber, main = "Distribuzione delle fibre")
+boxplot(cereali$carbo, main = "Distribuzione dei carboidrati")
+boxplot(cereali$sugars, main = "Distribuzione degli zuccheri")
+boxplot(cereali$potass, main = "Distribuzione del potassio")
+```
+
+Si nota una certa asimmetria in quasi tutte le distribuzioni, meno accentuata
+in quella del sodio, dei carboidrati e degli zuccheri.
+
+<br>
+
+## Relazioni fra variabili
+
+<br>
+
+### Conversione della variabile numerica "rating" in categorica
+
+Occupiamoci ora di convertire la variabile numerica "rating" in una variabile
+categorica, suddividendola in classi attraverso la funzione cut() per evidenziare
+i diversi livelli di soddisfazione dei consumatori e utilizzarli nelle analisi
+successive.
+
+```{r comment=NA}
+summary(cereali$rating)
+rating.categorica <- cut(cereali$rating, breaks = c(0,40,60,100), right = F)
+rating.categorica <- factor(rating.categorica, labels = c("cattivo", "mediocre",
+                                                          "buono"), ordered=T)
+table(rating.categorica)
+
+```
+
+### Connessione tra produttori e rating
+
+Proviamo ora a fornire una misura della connessione esistente tra i produttori
+e il rating dei cereali. Partiamo dalla tabella a doppia entrata delle due
+variabili.
+
+```{r echo=FALSE, comment=NA}
+table(cereali$mfr, rating.categorica)
+```
+
+Calcoliamo il chi quadrato:
+
+```{r include=FALSE}
+chisq.test(table(cereali$mfr, rating.categorica))
+X.squared <- chisq.test(table(cereali$mfr, rating.categorica))
+```
+
+```{r echo=FALSE, comment=NA}
+X.squared$statistic
+```
+
+Infine, arriviamo all'indice di Tschuprow:
+
+```{r include=FALSE}
+phi <- as.numeric(X.squared$statistic) / nrow(cereali)
+Tschuprow <- sqrt(phi/sqrt(6*2))
+```
+
+```{r comment=NA}
+Tschuprow
+```
+
+Il valore ottenuto indica che tra la due variabili si realizza il 43,6% della
+massima connessione possibile.
+
+<br>
+
+### Dipendenza in media tra calorie e rating
+
+Possiamo studiare l'associazione tra le calorie contenute nei 
+prodotti e il rating, analizzando la prima variabile condizionatamente alla
+seconda tramite gli istogrammi e i boxplot.
+
+```{r echo=FALSE}
+hist(cereali$calories[rating.categorica == "cattivo"], xlim = c(50,160),
+     col = 2, main = "Distribuzione calorie in base al rating", xlab = "Calorie", 
+     probability=T)
+
+hist(cereali$calories[rating.categorica == "mediocre"], xlim = c(50,160), 
+     col = 7, add = T, probability=T)
+
+hist(cereali$calories[rating.categorica == "buono"], xlim = c(50,160), col = 3, 
+     add=T, probability=T)
+
+legend (x="topright", title="Rating", legend=levels(rating.categorica), 
+        col = c(2,7,3), fill = c(2,7,3))
+
+boxplot(cereali$calories~rating.categorica, xlab = "Rating", ylab = "Calorie")
+```
+
+Da entrambi i grafici, è evidente che i cereali con i rating più alti sono anche
+quelli con meno calorie. Ragionevolmente, le preferenze dei consumatori si 
+orientano verso i prodotti che ritengono più salutari dal punto di vista calorico.
+
+Misuriamo tale dipendenza dal punto di vista numerico, calcolando le misure di
+sintesi separate per gruppi con la funzione tapply() e l'indice eta quadro
+utilizzando la funzione aov():
+
+```{r comment=NA}
+tapply(cereali$calories, rating.categorica, summary)
+
+```
+
+
+```{r comment=NA}
+aov.cal <- summary(aov(cereali$calories~rating.categorica))
+dev <- aov.cal[[1]]$`Sum Sq` 
+eta.squared <- dev[1] / sum(dev)
+eta.squared
+```
+
+A conti fatti, possiamo affermare che si realizza il 48% della massima 
+dipendenza in media ipotizzabile.
+
+<br>
+
+### Correlazione tra due nutrienti
+
+Vogliamo ora studiare le correlazioni esistenti tra i vari nutrienti
+presenti nei cereali e rappresentare quelle più interessanti, evidenziando
+la dipendenza lineare tra i due caratteri.
+
+Per farlo, creiamo una matrice con le sole variabili numeriche riferite ai 
+nutrienti. 
+
+```{r comment=NA}
+cereali.num <- cereali
+
+cereali.num$name <- NULL
+cereali.num$mfr <- NULL
+cereali.num$type <- NULL
+cereali.num$calories <- NULL
+cereali.num$shelf <- NULL
+cereali.num$weight <- NULL
+cereali.num$cups <- NULL
+cereali.num$rating <- NULL
+
+cereali.mat <- as.matrix(cereali.num)
+```
+
+Calcoliamo la matrice di correlazione:
+
+```{r comment=NA}
+round(cor(cereali.mat), 4)
+```
+
+Emerge una forte correlazione positiva (0.9101) tra le fibre e il potassio.
+
+```{r comment=NA}
+cor(cereali$fiber, cereali$potass)
+```
+
+Visualizziamola con il grafico di dispersione e la retta di regressione:
+
+```{r echo=FALSE}
+plot(cereali$fiber, cereali$potass, main = "Relazione tra potassio e fibre", 
+     xlab = "Fibre", ylab = "Potassio")
+reg.potass <- lm(cereali$potass~cereali$fiber)
+abline(reg.potass,col="green")
+```
+
+```{r comment=NA}
+summary(reg.potass)
+```
+
+Il coefficiente di determinazione lineare, che vale 0.8282, indica che l'82,8% della variabilità
+della quantità di potassio è spiegata dalla relazione lineare con la quantità 
+di fibre. Inoltre, dato un aumento unitario della quantità di fibre,
+la quantità di potassio aumenta in media di 26.5 milligrammi.
+
+Sempre osservando la matrice, notiamo una moderata correlazione negativa (-0.2821)
+tra le proteine e gli zuccheri.
+
+```{r comment=NA}
+cor(cereali$protein, cereali$sugars)
+
+```
+
+```{r echo=FALSE}
+plot(cereali$protein, cereali$sugars, main = "Relazione tra zuccheri e proteine",
+     xlab = "Proteine", ylab = "Zuccheri")
+reg.sugars <- lm(cereali$sugars~cereali$protein)
+abline(reg.sugars, col = "green")
+```
+
+```{r comment=NA}
+summary(reg.sugars)
+
+```
+
+Questa volta, il coefficiente di determinazione lineare equivale a 0.07957 ed
+è sensibilmente più basso, indicando che il modello lineare non è quello
+più adatto per descrivere il legame tra le due variabili.
