@@ -1,137 +1,159 @@
 <!DOCTYPE HTML>
 
 <html>
-	<head>
-		<title>Giovanni Cutri's Portfolio Website</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="icon" type="image/x-icon" href="images/favicon.ico">
-		<link rel="stylesheet" href="assets/css/main.css" />
-	</head>
-	<body class="is-preload">
 
-		<!-- Nav -->
-			<nav id="nav">
-				<ul class="container">
-					<li><a href="#top">Top</a></li>
-					<li><a href="#portfolio">Portfolio</a></li>
-					<li><a href="#contact">Contact</a></li>
+<head>
+	<title>Giovanni Cutrì's Portfolio Website</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="icon" type="image/x-icon" href="images/favicon.ico">
+	<link rel="stylesheet" href="assets/css/main.css" />
+</head>
+
+<body class="is-preload">
+
+	<!-- Nav -->
+	<nav id="nav">
+		<ul class="container">
+			<li><a href="#top">About</a></li>
+			<li><a href="#portfolio">Portfolio</a></li>
+			<li><a href="#contact">Contact</a></li>
+		</ul>
+	</nav>
+
+	<!-- Home -->
+	<article id="top" class="wrapper style1">
+		<div class="container">
+			<div class="row">
+				<div class="col-4 col-5-large col-12-medium">
+					<span class="image fit"><img src="images/top.jpg" alt="" /></span>
+				</div>
+				<div class="col-8 col-7-large col-12-medium">
+					<header>
+						<h1><strong>Giovanni Cutrì</strong></h1>
+					</header>
+					<p>I am a Statistics student at the <strong>University of Bologna</strong>. My areas of interest
+						include <strong>data science</strong> and <strong>machine learning</strong> with a focus on
+						<strong>business applications</strong>.
+					</p>
+					<a href="#portfolio" class="button large scrolly">Take a look at my projects</a>
+				</div>
+			</div>
+		</div>
+	</article>
+
+	<!-- Portfolio -->
+	<article id="portfolio" class="wrapper style3">
+		<div class="container">
+			<header>
+				<h2>Here's some of my recent work.</h2>
+				<p>Statistical analyses performed with Python and R.</p>
+			</header>
+			<div class="row">
+				<div class="col-4 col-6-medium col-12-small">
+					<article class="box style2">
+						<a href="https://nbviewer.org/github/giovanni-cutri/giovanni-cutri.github.io/blob/main/projects/flashpoint-analytics/notebooks/flashpoint_analytics.ipynb"
+							class="image featured"><img src="images/eda.jpg" alt="" /></a>
+						<h3><a
+								href="https://nbviewer.org/github/giovanni-cutri/giovanni-cutri.github.io/blob/main/projects/flashpoint-analytics/notebooks/flashpoint_analytics.ipynb">Flashpoint
+								Analytics</a></h3>
+						<p>Exploratory data analysis on the Flashpoint's games collection.</p>
+					</article>
+				</div>
+				<div class="col-4 col-6-medium col-12-small">
+					<article class="box style2">
+						<a href="https://nbviewer.org/github/giovanni-cutri/giovanni-cutri.github.io/blob/main/projects/souvenir-sales-time-series-analysis/notebooks/souvenir-sales-time-series-analysis.ipynb"
+							class="image featured"><img src="images/ts.png" alt="" /></a>
+						<h3><a
+								href="https://nbviewer.org/github/giovanni-cutri/giovanni-cutri.github.io/blob/main/projects/souvenir-sales-time-series-analysis/notebooks/souvenir-sales-time-series-analysis.ipynb">Souvenir
+								Sales Forecasting</a></h3>
+						<p>Time series analysis of the sales in an Australian souvenir shop.</p>
+					</article>
+				</div>
+				<div class="col-4 col-6-medium col-12-small">
+					<article class="box style2">
+						<a href="projects/lyrics-text-mining/html/caparezza.html" class="image featured"><img
+								src="images/tm.png" alt="" /></a>
+						<h3><a href="projects/lyrics-text-mining/html/caparezza.html">Lyrics Text Mining</a></h3>
+						<p>Text mining and sentiment analysis conducted on the lyrics of some popular songs.</p>
+					</article>
+				</div>
+			</div>
+			<br>
+			<br>
+			<header>
+				<p>Machine learning projects with business applications.</p>
+			</header>
+			<div class="row">
+				<div class="col-4 col-6-medium col-12-small">
+					<article class="box style2">
+						<a href="https://nbviewer.org/github/giovanni-cutri/giovanni-cutri.github.io/blob/main/projects/perceptual-map-computers/script.ipynb"
+							class="image featured"><img src="images/map.png" alt="" /></a>
+						<h3><a
+								href="https://nbviewer.org/github/giovanni-cutri/giovanni-cutri.github.io/blob/main/projects/perceptual-map-computers/script.ipynb">Perceptual
+								Mapping</a></h3>
+						<p>Creation of a perceptual map for the computers market.</p>
+					</article>
+				</div>
+				<div class="col-4 col-6-medium col-12-small">
+					<article class="box style2">
+						<a href="https://nbviewer.org/github/giovanni-cutri/giovanni-cutri.github.io/blob/main/projects/logistic-regression-dvd/script.ipynb"
+							class="image featured"><img src="images/bc.png" alt="" /></a>
+						<h3><a
+								href="https://nbviewer.org/github/giovanni-cutri/giovanni-cutri.github.io/blob/main/projects/logistic-regression-dvd/script.ipynb">Purchase
+								Predictions</a></h3>
+						<p>Logistic regression applied to a business setting regarding purchases of DVDs.</p>
+					</article>
+				</div>
+				<div class="col-4 col-6-medium col-12-small">
+					<article class="box style2">
+						<a href="https://nbviewer.org/github/giovanni-cutri/giovanni-cutri.github.io/blob/main/projects/kprototype-catalog/script.ipynb"
+							class="image featured"><img src="images/cluster.svg" alt="" /></a>
+						<h3><a
+								href="https://nbviewer.org/github/giovanni-cutri/giovanni-cutri.github.io/blob/main/projects/kprototype-catalog/script.ipynb">Customer
+								Segmentation via Cluster Analysis</a></h3>
+						<p>Experimenting the potential of cluster analysis for customer segmentation using the
+							<i>k</i>-proto algorithm.
+						</p>
+					</article>
+				</div>
+			</div>
+			<br>
+			<br>
+		</div>
+	</article>
+
+	<!-- Contact -->
+	<article id="contact" class="wrapper style4">
+		<div class="container medium">
+			<header>
+				<h2>Contact me!</h2>
+			</header>
+			<div class="col-12">
+				<hr />
+				<h3>Find me on ...</h3>
+				<ul class="social">
+					<li><a href="https://www.linkedin.com/in/giovanni-cutri/" class="icon brands fa-linkedin-in"><span
+								class="label">LinkedIn</span></a></li>
+					<li><a href="https://github.com/giovanni-cutri" class="icon brands fa-github"><span
+								class="label">GitHub</span></a></li>
+					<li><a href="mailto:giovannicutri02@gmail.com" class="icon brands fa-google"><span
+								class="label">Gmail</span></a></li>
 				</ul>
-			</nav>
 
-		<!-- Home -->
-			<article id="top" class="wrapper style1">
-				<div class="container">
-					<div class="row">
-						<div class="col-4 col-5-large col-12-medium">
-							<span class="image fit"><img src="images/top.jpg" alt="" /></span>
-						</div>
-						<div class="col-8 col-7-large col-12-medium">
-							<header>
-								<h1><strong>Giovanni Cutrì</strong></h1>
-							</header>
-							<p>I am a Statistics student at the <strong>University of Bologna</strong>. My areas of interest include <strong>data science</strong> and <strong>machine learning</strong> with a focus on <strong>business applications</strong>.</p>
-							<a href="#portfolio" class="button large scrolly">Take a look at my projects</a>
-						</div>
-					</div>
-				</div>
-			</article>
+			</div>
+		</div>
+		</div>
+	</article>
 
-		<!-- Portfolio -->
-			<article id="portfolio" class="wrapper style3">
-				<div class="container">
-					<header>
-						<h2>Here's some of my recent work.</h2>
-						<p>Statistical analyses performed with Python and R.</p>
-					</header>
-					<div class="row">
-						<div class="col-4 col-6-medium col-12-small">
-							<article class="box style2">
-								<a href="https://nbviewer.org/github/giovanni-cutri/giovanni-cutri.github.io/blob/main/projects/flashpoint-analytics/notebooks/flashpoint_analytics.ipynb" class="image featured"><img src="images/eda.jpg" alt="" /></a>
-								<h3><a href="https://nbviewer.org/github/giovanni-cutri/giovanni-cutri.github.io/blob/main/projects/flashpoint-analytics/notebooks/flashpoint_analytics.ipynb">Flashpoint Analytics</a></h3>
-								<p>Exploratory data analysis on the Flashpoint's games collection.</p>
-							</article>
-						</div>
-						<div class="col-4 col-6-medium col-12-small">
-							<article class="box style2">
-								<a href="https://nbviewer.org/github/giovanni-cutri/giovanni-cutri.github.io/blob/main/projects/souvenir-sales-time-series-analysis/notebooks/souvenir-sales-time-series-analysis.ipynb" class="image featured"><img src="images/ts.png" alt="" /></a>
-								<h3><a href="https://nbviewer.org/github/giovanni-cutri/giovanni-cutri.github.io/blob/main/projects/souvenir-sales-time-series-analysis/notebooks/souvenir-sales-time-series-analysis.ipynb">Souvenir Sales Forecasting</a></h3>
-								<p>Time series analysis of the sales in an Australian souvenir shop.</p>
-							</article>
-						</div>
-						<div class="col-4 col-6-medium col-12-small">
-							<article class="box style2">
-								<a href="projects/lyrics-text-mining/html/caparezza.html" class="image featured"><img src="images/tm.png" alt="" /></a>
-								<h3><a href="projects/lyrics-text-mining/html/caparezza.html">Lyrics Text Mining</a></h3>
-								<p>Text mining and sentiment analysis conducted on the lyrics of some popular songs.</p>
-							</article>
-						</div>
-					</div>
-					<br>
-					<br>
-					<header>
-						<p>Machine learning projects with business applications.</p>
-					</header>
-					<div class="row">
-						<div class="col-4 col-6-medium col-12-small">
-							<article class="box style2">
-								<a href="https://nbviewer.org/github/giovanni-cutri/giovanni-cutri.github.io/blob/main/projects/perceptual-map-computers/script.ipynb" class="image featured"><img src="images/map.png" alt="" /></a>
-								<h3><a href="https://nbviewer.org/github/giovanni-cutri/giovanni-cutri.github.io/blob/main/projects/perceptual-map-computers/script.ipynb">Perceptual Mapping</a></h3>
-								<p>Creation of a perceptual map for the computers market.</p>
-							</article>
-						</div>
-						<div class="col-4 col-6-medium col-12-small">
-							<article class="box style2">
-								<a href="https://nbviewer.org/github/giovanni-cutri/giovanni-cutri.github.io/blob/main/projects/logistic-regression-dvd/script.ipynb" class="image featured"><img src="images/bc.png" alt="" /></a>
-								<h3><a href="https://nbviewer.org/github/giovanni-cutri/giovanni-cutri.github.io/blob/main/projects/logistic-regression-dvd/script.ipynb">Purchase Predictions</a></h3>
-								<p>Logistic regression applied to a business setting regarding purchases of DVDs.</p>
-							</article>
-						</div>
-						<div class="col-4 col-6-medium col-12-small">
-							<article class="box style2">
-								<a href="https://nbviewer.org/github/giovanni-cutri/giovanni-cutri.github.io/blob/main/projects/kprototype-catalog/script.ipynb" class="image featured"><img src="images/cluster.svg" alt="" /></a>
-								<h3><a href="https://nbviewer.org/github/giovanni-cutri/giovanni-cutri.github.io/blob/main/projects/kprototype-catalog/script.ipynb">Customer Segmentation via Cluster Analysis</a></h3>
-								<p>Experimenting the potential of cluster analysis for customer segmentation using the <i>k</i>-proto algorithm.</p>
-							</article>
-						</div>
-					</div>
-					<br>
-					<br>
-				</div>
-			</article>
+	<!-- Scripts -->
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/jquery.scrolly.min.js"></script>
+	<script src="assets/js/browser.min.js"></script>
+	<script src="assets/js/breakpoints.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<script src="assets/js/main.js"></script>
 
-		<!-- Contact -->
-			<article id="contact" class="wrapper style4">
-				<div class="container medium">
-					<header>
-						<h2>Contact me!</h2>
-					</header>
-						<div class="col-12">
-							<hr />
-							<h3>Find me on ...</h3>
-							<ul class="social">
-								<li><a href="https://www.linkedin.com/in/giovanni-cutri/" class="icon brands fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
-								<li><a href="https://github.com/giovanni-cutri" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
-								<li><a href="mailto:giovannicutri02@gmail.com" class="icon brands fa-google"><span class="label">Gmail</span></a></li>
-							</ul>
-							<hr />
-						</div>
-					</div>
-					<footer>
-						<ul id="copyright">
-							<li>&copy; Made with <a href="http://html5up.net">HTML5 UP</a></li>
-						</ul>
-					</footer>
-				</div>
-			</article>
+</body>
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-
-	</body>
 </html>
