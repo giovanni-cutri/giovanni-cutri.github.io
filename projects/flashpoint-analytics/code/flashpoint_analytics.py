@@ -157,7 +157,7 @@ plt.show()
 # %% [markdown]
 # Flash games started to appear towards the end of the twentieth century and became popular in the next decade, before slowly fading out in favour of mobile games.
 #
-# Let's observe the release dates we have got here, remembering that they are not specified for all games.
+# Let's observe the release dates we have got here, keeping in mind that they are not specified for all games.
 
 # %%
 df_dates = df.loc[
