@@ -89,9 +89,9 @@ print(reviews_texts[0])
 with open("reviews.json", "r", encoding="utf-8") as f:
     reviews = json.load(f)
 
-for review in reviews:
+for review in reviews[:5]:
     tokens = nltk.tokenize.word_tokenize(review)
-    print(tokens)
+    print(tokens[:5])
 
 # %% [markdown]
 # Each portion of text in our data is a *token*: they could be smaller sentences, words, characters, etc. Here we choose to consider individual words as tokens, and look at the result for each review.
@@ -104,14 +104,14 @@ from nltk.tokenize import word_tokenize
 
 stop_words = set(stopwords.words("english"))
 
-for review in reviews:
+for review in reviews[:10]:
     tokens = word_tokenize(review)
     clean_tokens = [
         word
         for word in tokens
         if word.casefold() not in stop_words and word.casefold().isalpha()
     ]
-    print(clean_tokens)
+    print(clean_tokens[:5])
 
 # %% [markdown]
 # Now the tokens are less cluttered and we start to see some interesting words which fit well into a video game review, such as "game", "playing", "download", and so on.
@@ -125,7 +125,7 @@ from nltk.stem import PorterStemmer
 
 stemmer = PorterStemmer()
 
-for review in reviews:
+for review in reviews[:5]:
     tokens = word_tokenize(review)
     clean_tokens = [
         word
@@ -133,4 +133,4 @@ for review in reviews:
         if word.casefold() not in stop_words and word.casefold().isalpha()
     ]
     stemmed_words = [stemmer.stem(word) for word in clean_tokens]
-    print(stemmed_words)
+    print(stemmed_words[:5])
