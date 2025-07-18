@@ -1,0 +1,149 @@
+---
+title: An R Markdown document converted from "steam_r.ipynb"
+output: html_document
+---
+
+# Steam Reviews Analysis
+
+[Steam](https://store.steampowered.com/) is a video game platform which allows players to buy, play and rate their favourite games, as well as leaving reviews on them.
+
+This notebook contains a text mining analysis involving the reviews left on the website for some popular video games, with the intention to gain insights on the key features of a game which leave a more long lasting impact on players and shape their opinion on it.
+
+## Import packages
+
+```{r}
+options(warn = -1)
+library(tidyverse)
+library(rvest)
+library(jsonlite)
+library(jsonify)
+library(quanteda)
+library(quanteda.textplots)
+library(quanteda.textstats)
+library(stopwords)
+```
+
+These are the modules we are going to use:
+- *tidyverse* makes the syntax of the commands easier and cleanier;
+- *rvest* is useful to scrape data from web pages;
+- *jsonlite* and *jsonify* allow us to parse and treat data in JSON format;
+- *quanteda* is extremely helpful for anything regarding text mining analysis;
+- *stopwords* contains a list of stopwords, i.e. words that are not interesting for text analysis.
+
+## Retrieve data
+
+Fortunately for us, Steam provides a free API with few restrictions, which makes it easy to retrieve data of any kind from the website, including the games reviews.
+
+By reading the [official documentation](https://partner.steamgames.com/doc/store/getreviews), we can find the API endpoint we are interested in and the parameters we can pass to it to modify the response.
+
+We still have to choose which games we are going to pick for our analysis. A good idea could be to use the 25 most played games on Steam, a list which can be found on this [webpage](https://steamcharts.com/top).
+
+```{r}
+# make a request to the website for that page
+page <- read_html("https://steamcharts.com/top")
+
+# find the HTML elements which contain the ids of the games
+games_elements <- page %>% html_elements(css = "a[href*='app']")
+
+game_ids <- vector()
+
+# save the ids into a vector
+for (game_element in games_elements) {
+    game_id <- game_element %>% html_attr("href") %>% strsplit("app/") %>% unlist() %>% tail(n = 1)
+    game_ids <- append(game_ids, game_id)
+}
+
+print(game_ids)
+```
+
+Now that we have got the identifiers for the games, we can use the API to get their reviews.
+
+```{r}
+reviews_texts <- vector()
+
+for (game_id in game_ids) {
+
+    # limit the number of reviews to 10 (default is 20)
+    api_endpoint <- paste("https://store.steampowered.com/appreviews/", game_id, "?json=1&purchase_type=all&num_per_page=10", sep="")
+
+    # get the reviews for the game
+    reviews <- api_endpoint %>% fromJSON() %>% .$reviews %>% .$review
+    # save the reviews to a vector
+    reviews_texts <- reviews_texts %>% c(reviews)
+}
+
+# dump the reviews into a separate file to easily access them later
+write(toJSON(reviews_texts), "reviews.json")
+
+# print a sample review
+print(reviews_texts[1])
+```
+
+## Text Mining Analysis
+
+We are all set: let's import the reviews from the file and start our text mining analysis.
+
+```{r}
+reviews <- fromJSON("reviews.json")
+
+corpus_reviews <- corpus(reviews)
+```
+
+The technical term for the totality of our reviews (or, more generally, of our texts), is *corpus*. Here we use the *corpus()* function from the *quanteda* package to make R treat our reviews data as a corpus, so that we can apply some specific functions and do a more structured analysis with it.
+
+```{r}
+tokens <- tokens(corpus_reviews, what = "word", remove_punct = TRUE, remove_symbols = TRUE) %>% tokens_tolower()
+tokens
+```
+
+Each portion of text in our data is a *token*: they could be smaller sentences, words, characters, etc. Here we choose to consider individual words as tokens.
+
+We make sure to remove punctuation and symbols and transform everything to lowercase, since these are conventions that are useful for human reading, but not necessary for automated analysis.
+
+```{r}
+dfm_reviews <- tokens %>% dfm() %>% dfm_wordstem() %>% dfm_remove(stopwords("english"))
+dfm_reviews
+```
+
+Here we have created a DFM (document-feature matrix), which is a matrix where each row corresponds to a text of our corpus and each column corresponds to a feature (in our case, a term). Each element indicates the frequency of the term in the document (that is, the total number of times it appears in the document).
+
+As we can see, we have got 4,055 terms and a sparsity of 98.40%: there is a high percentage of elements of the matrix whose value is 0. This is a common characteristic of document-feature matrices, as words that get used in a text may not appear in others.
+
+We have also removed stopwords (words that do not bring significant value to our analysis, such as prepositions, articles, and so on) and we have applied stemming to the remaining words: that means that each word was reduced to its root form, just as it happens in a dictionary. This is needed because we are often not focused on the specific inflection of the word in the context, but rather the generic idea which is associated with it.
+
+```{r}
+topfeatures(dfm_reviews, 15) %>% print()
+```
+
+These are the 15 most common terms in our corpus: as we could expect, we have words like "game", "play", "good", and so on.
+
+```{r}
+
+textplot_wordcloud(dfm_reviews, min_count = 10, random_order = FALSE, rotation = 0.25,
+color = RColorBrewer::brewer.pal(8, "Dark2"))
+```
+
+This is the same information conveyed in a graphical format: it's a *word cloud*, where the size of the font of each word is proportional to its frequency. In the middle of cloud we see the bigger words, which are also the most frequent, and they are surrounded by all the remaining words with smaller font and lower frequency.
+
+```{r}
+kwic(tokens, "game", window=10)[1:5,]
+```
+
+The *kwic* function locates keywords-in-context: it provides the context in which a word was used in the original texts, with the words preceding and following it.
+
+```{r}
+readability_dale_chall <- corpus_reviews %>% textstat_readability(measure = "Dale.Chall") %>% arrange(Dale.Chall)
+mean(readability_dale_chall$Dale.Chall)
+
+readability_flesch <- corpus_reviews %>% textstat_readability(measure = "Flesch") %>% arrange(Flesch)
+mean(readability_flesch$Flesch)
+```
+
+Another feature of the texts we may be interested in is their readability: that is, how easily accessible they are for a reader. This is measured considering the number of words, sentences, syllabes in the text or their difficulty.
+
+The Dale-Chall measure was recently [improved](https://readabilityformulas.com/learn-about-the-new-dale-chall-readability-formula/) with a new formula and can take values from 15 or less (very difficult to read) to 58 or more (very easy to read).
+
+The Flesch measure can take values from 0 (very difficult to read) to 100 (very easy to read).
+
+In our data, considering the mean for all the reviews, both measures take a value which is somewhat intermediate between the extremes, suggesting that there is a mixed readability with no clear results. Consider the nature of our data, we could have expected a strong leaning towards the "easier" side, but probably the extremely colloquial, ungrammatical and symbols-filled language paradoxically makes some texts harder and less comprehensible.
+
